@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoLink - Mi Horario y Cronograma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #10b981;
+        }
+        body {
+            background-color: #f8fafc;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        .time-slot {
+            transition: all 0.2s;
+        }
+        .time-slot:hover {
+            transform: translateX(4px);
+        }
+        .tab-active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+        /* Colores basados en tu horario */
+        .border-ed-fisica { border-left-color: #fde047; }
+        .border-biology { border-left-color: #86efac; }
+        .border-math { border-left-color: #f472b6; }
+        .border-business { border-left-color: #fcd34d; }
+        .border-idiomas { border-left-color: #fca5a5; }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Header -->
+    <header class="bg-white border-b sticky top-0 z-50 px-4 py-3 shadow-sm">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-indigo-600 p-2 rounded-lg">
+                    <i class="fas fa-calendar-check text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800 leading-tight">EcoLink</h1>
+                    <p class="text-xs text-indigo-600 font-semibold">Grado 12 • Grupo 3</p>
+                </div>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center border-2 border-indigo-200">
+                <i class="fas fa-user text-indigo-600"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto p-4">
+        
+        <!-- Tabs de Navegación -->
+        <div class="flex border-b mb-6 bg-white rounded-t-xl shadow-sm">
+            <button onclick="switchTab('schedule')" id="tab-schedule" class="flex-1 py-3 font-semibold text-sm tab-active">Lunes</button>
+            <button onclick="switchTab('social')" id="tab-social" class="flex-1 py-3 font-semibold text-sm text-gray-500">Max (G1)</button>
+            <button onclick="switchTab('calendar')" id="tab-calendar" class="flex-1 py-3 font-semibold text-sm text-gray-500">Cronograma</button>
+        </div>
+
+        <!-- SECCIÓN 1: HORARIO PERSONAL (LUNES - GRUPO 3) -->
+        <section id="section-schedule" class="space-y-4 animate-fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-gray-800">Mi Horario de Hoy</h2>
+                <div class="flex gap-2 items-center">
+                    <button onclick="enableNotifications()" id="notif-btn" class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-bold hover:bg-indigo-200 transition-colors shadow-sm">
+                        <i class="fas fa-bell mr-1"></i> Activar Alertas
+                    </button>
+                    <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1 rounded-full font-bold border border-gray-200">Grupo 3</span>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <!-- Clase 1: Ed. Física -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-ed-fisica time-slot">
+                    <span class="text-xs font-bold text-yellow-500 uppercase tracking-wider">7:40 a.m. - 9:00 a.m.</span>
+                    <h3 class="font-bold text-gray-800 text-lg">Ed. Física</h3>
+                </div>
+
+                <!-- Clase 2: Biology IV (Bloque doble) -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-biology time-slot">
+                    <span class="text-xs font-bold text-green-500 uppercase tracking-wider">9:20 a.m. - 11:00 a.m.</span>
+                    <h3 class="font-bold text-gray-800 text-lg">Biology IV</h3>
+                    <p class="text-xs text-gray-500 mt-1">Educador: Biología</p>
+                </div>
+
+                <!-- Receso -->
+                <div class="bg-gray-50 border-2 border-dashed border-gray-200 p-4 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-gray-400 uppercase">11:00 a.m. - 11:40 a.m.</span>
+                        <h3 class="font-bold text-gray-500">Receso</h3>
+                    </div>
+                    <i class="fas fa-coffee text-gray-300 text-2xl"></i>
+                </div>
+
+                <!-- Clase 3: Matemáticas VI (Bloque doble) -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-math time-slot">
+                    <span class="text-xs font-bold text-pink-500 uppercase tracking-wider">11:40 a.m. - 1:20 p.m.</span>
+                    <h3 class="font-bold text-gray-800 text-lg">Matemáticas VI</h3>
+                    <p class="text-xs text-gray-500 mt-1">Educador: Erick</p>
+                </div>
+
+                <!-- Clase 4: Business Management IV -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-business time-slot">
+                    <span class="text-xs font-bold text-yellow-600 uppercase tracking-wider">1:20 p.m. - 2:10 p.m.</span>
+                    <h3 class="font-bold text-gray-800 text-lg">Business Management IV</h3>
+                    <p class="text-xs text-gray-500 mt-1">Educador: Elisa</p>
+                </div>
+
+                <!-- Clase 5: Idiomas -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-idiomas time-slot">
+                    <span class="text-xs font-bold text-red-400 uppercase tracking-wider">2:10 p.m. - 3:00 p.m.</span>
+                    <h3 class="font-bold text-gray-800 text-lg">Idiomas</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: COMPAÑEROS / SOCIAL MATCHING CON MAX -->
+        <section id="section-social" class="hidden space-y-4">
+            <!-- Tarjeta de Perfil de Max -->
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 rounded-2xl text-white shadow-lg relative overflow-hidden">
+                <i class="fas fa-users absolute -right-4 -bottom-4 text-7xl opacity-20"></i>
+                <div class="flex items-center gap-4 relative z-10">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-indigo-600 text-xl font-bold shadow-md">
+                        MX
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl">Max</h3>
+                        <p class="text-indigo-100 text-sm">Grado 12 • Grupo 1</p>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="font-bold text-gray-700 mt-6 mb-2">Coincidencias el día Lunes:</h4>
+            
+            <div class="space-y-3">
+                <!-- Coincidencia 1 -->
+                <div class="bg-white p-4 rounded-xl flex items-center justify-between border border-gray-100 shadow-sm border-l-4 border-ed-fisica">
+                    <div>
+                        <span class="text-xs font-bold text-yellow-500 uppercase">7:40 a.m. - 9:00 a.m.</span>
+                        <h4 class="font-bold text-gray-800">Ed. Física</h4>
+                    </div>
+                    <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-md"><i class="fas fa-check-circle mr-1"></i>Match</span>
+                </div>
+
+                <!-- Coincidencia 2 (Receso) -->
+                <div class="bg-white p-4 rounded-xl flex items-center justify-between border border-gray-100 shadow-sm border-l-4 border-gray-300">
+                    <div>
+                        <span class="text-xs font-bold text-gray-500 uppercase">11:00 a.m. - 11:40 a.m.</span>
+                        <h4 class="font-bold text-gray-800">Receso (Compartido)</h4>
+                    </div>
+                    <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-md"><i class="fas fa-pizza-slice mr-1"></i>Libres</span>
+                </div>
+
+                <!-- Coincidencia 3 -->
+                <div class="bg-white p-4 rounded-xl flex items-center justify-between border border-gray-100 shadow-sm border-l-4 border-idiomas">
+                    <div>
+                        <span class="text-xs font-bold text-red-400 uppercase">2:10 p.m. - 3:00 p.m.</span>
+                        <h4 class="font-bold text-gray-800">Idiomas</h4>
+                    </div>
+                    <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-md"><i class="fas fa-check-circle mr-1"></i>Match</span>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-xl text-sm text-blue-800 mt-4 flex gap-3">
+                    <i class="fas fa-info-circle mt-0.5"></i>
+                    <p>Aunque tú tienes <strong>Biology IV</strong> y <strong>Matemáticas VI</strong>, Max tiene <strong>Matemáticas VI</strong> y <strong>Business Management IV</strong> en esos horarios.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: CRONOGRAMA SEMESTRE B -->
+        <section id="section-calendar" class="hidden space-y-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-gray-800">Semestre B (24-25)</h2>
+                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+            </div>
+
+            <div class="relative border-l-2 border-indigo-200 ml-3 space-y-6">
+                <!-- Enero -->
+                <div class="relative pl-6">
+                    <div class="absolute w-4 h-4 bg-indigo-600 rounded-full -left-[9px] top-1 border-4 border-white"></div>
+                    <h3 class="font-bold text-indigo-600">Enero</h3>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 mt-2">
+                        <p class="text-sm font-bold text-gray-800">20 Ene</p>
+                        <p class="text-sm text-gray-600">Inicio de Semestre / Semana 0</p>
+                    </div>
+                </div>
+
+                <!-- Febrero -->
+                <div class="relative pl-6">
+                    <div class="absolute w-4 h-4 bg-indigo-400 rounded-full -left-[9px] top-1 border-4 border-white"></div>
+                    <h3 class="font-bold text-indigo-600">Febrero</h3>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 mt-2">
+                        <p class="text-sm font-bold text-gray-800">24 al 27 Feb</p>
+                        <p class="text-sm text-gray-600">Cierre primer periodo de evaluación</p>
+                    </div>
+                </div>
+
+                <!-- Marzo -->
+                <div class="relative pl-6">
+                    <div class="absolute w-4 h-4 bg-emerald-400 rounded-full -left-[9px] top-1 border-4 border-white"></div>
+                    <h3 class="font-bold text-emerald-600">Marzo</h3>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 mt-2">
+                        <p class="text-sm font-bold text-gray-800">3, 4 y 5 Mar</p>
+                        <p class="text-sm text-gray-600">AQMUN</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 mt-2">
+                        <p class="text-sm font-bold text-gray-800">31 Mar al 4 Abr</p>
+                        <p class="text-sm text-gray-600">Cierre segundo periodo de evaluación</p>
+                    </div>
+                </div>
+
+                <!-- Abril -->
+                <div class="relative pl-6">
+                    <div class="absolute w-4 h-4 bg-orange-400 rounded-full -left-[9px] top-1 border-4 border-white"></div>
+                    <h3 class="font-bold text-orange-500">Abril</h3>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 mt-2">
+                        <p class="text-sm font-bold text-gray-800">21 Abr</p>
+                        <p class="text-sm text-gray-600">Inicia receso escolar (Semana Santa)</p>
+                    </div>
+                </div>
+
+                <!-- Mayo -->
+                <div class="relative pl-6">
+                    <div class="absolute w-4 h-4 bg-red-400 rounded-full -left-[9px] top-1 border-4 border-white"></div>
+                    <h3 class="font-bold text-red-500">Mayo</h3>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 mt-2">
+                        <p class="text-sm font-bold text-gray-800">2 al 6 May</p>
+                        <p class="text-sm text-gray-600">Evaluaciones semestrales</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 mt-2">
+                        <p class="text-sm font-bold text-gray-800">29 May</p>
+                        <p class="text-sm text-gray-600 font-bold text-red-500">Termina semestre</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Barra de Navegación Inferior -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3 flex justify-around items-center max-w-md mx-auto shadow-2xl rounded-t-3xl z-50">
+        <button onclick="switchTab('schedule')" class="text-indigo-600 flex flex-col items-center p-2">
+            <i class="fas fa-clock text-xl"></i>
+            <span class="text-[10px] mt-1 font-bold">Mi Horario</span>
+        </button>
+        <button onclick="switchTab('social')" class="text-gray-400 flex flex-col items-center p-2">
+            <i class="fas fa-user-friends text-xl"></i>
+            <span class="text-[10px] mt-1 font-bold">Amigos</span>
+        </button>
+        <button onclick="switchTab('calendar')" class="text-gray-400 flex flex-col items-center p-2">
+            <i class="fas fa-calendar-alt text-xl"></i>
+            <span class="text-[10px] mt-1 font-bold">Cronograma</span>
+        </button>
+    </nav>
+
+    <!-- Contenedor de Notificaciones In-App (Toasts) -->
+    <div id="toast-container" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 w-11/12 max-w-sm pointer-events-none"></div>
+
+    <script>
+        function switchTab(tabId) {
+            // Ocultar todas las secciones
+            document.getElementById('section-schedule').classList.add('hidden');
+            document.getElementById('section-social').classList.add('hidden');
+            document.getElementById('section-calendar').classList.add('hidden');
+            
+            // Quitar estilos activos de los tabs superiores
+            document.getElementById('tab-schedule').classList.remove('tab-active', 'text-gray-500');
+            document.getElementById('tab-social').classList.remove('tab-active', 'text-gray-500');
+            document.getElementById('tab-calendar').classList.remove('tab-active', 'text-gray-500');
+            
+            // Activar la sección y tab superior correspondientes
+            document.getElementById('section-' + tabId).classList.remove('hidden');
+            document.getElementById('tab-' + tabId).classList.add('tab-active');
+            
+            // Poner en gris los tabs superiores no seleccionados
+            ['schedule', 'social', 'calendar'].forEach(t => {
+                if(t !== tabId) document.getElementById('tab-' + t).classList.add('text-gray-500');
+            });
+
+            // Actualizar colores de la barra de navegación inferior
+            const navButtons = document.querySelectorAll('nav.fixed bottom-0 button');
+            navButtons.forEach(btn => {
+                btn.classList.remove('text-indigo-600');
+                btn.classList.add('text-gray-400');
+            });
+            
+            // Buscar el botón inferior correcto y activarlo
+            const activeNavBtn = document.querySelector(`nav button[onclick="switchTab('${tabId}')"]`);
+            if(activeNavBtn) {
+                activeNavBtn.classList.remove('text-gray-400');
+                activeNavBtn.classList.add('text-indigo-600');
+            }
+        }
+
+        // --- SISTEMA INTELIGENTE DE NOTIFICACIONES ---
+        // Horarios mapeados en formato 24 horas para cálculos matemáticos
+        const mondaySchedule = [
+            { name: "Ed. Física", hour: 7, minute: 40 },
+            { name: "Biology IV", hour: 9, minute: 20 },
+            { name: "Receso", hour: 11, minute: 0 },
+            { name: "Matemáticas VI", hour: 11, minute: 40 },
+            { name: "Business Management IV", hour: 13, minute: 20 }, // 1:20 p.m.
+            { name: "Idiomas", hour: 14, minute: 10 } // 2:10 p.m.
+        ];
+
+        let notificationsEnabled = false;
+        let notifiedClasses = new Set(); // Historial para no repetir la misma alerta
+
+        function enableNotifications() {
+            // Cambiar estado del botón
+            const btn = document.getElementById('notif-btn');
+            btn.innerHTML = '<i class="fas fa-bell-slash mr-1"></i> Alertas On';
+            btn.classList.replace('bg-indigo-100', 'bg-green-100');
+            btn.classList.replace('text-indigo-700', 'text-green-700');
+            btn.classList.replace('hover:bg-indigo-200', 'hover:bg-green-200');
+
+            // Pedir permisos al navegador
+            if (!("Notification" in window)) {
+                showToast("Tu navegador no soporta alertas nativas, pero las verás aquí dentro.", "warning");
+                notificationsEnabled = true;
+            } else {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        showToast("¡Listo! Te avisaremos 5 mins antes de cada clase.", "success");
+                    } else {
+                        showToast("Acepta los permisos si deseas notificaciones fuera de la app.", "warning");
+                    }
+                    notificationsEnabled = true;
+                });
+            }
+            
+            // Iniciar comprobación del reloj
+            checkSchedule(); // Revisión inmediata
+            setInterval(checkSchedule, 60000); // Revisión cada 60 segundos (1 minuto)
+        }
+
+        function checkSchedule() {
+            if (!notificationsEnabled) return;
+            
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+
+            mondaySchedule.forEach(clase => {
+                // Convertir horas a minutos totales del día para compararlos fácilmente
+                const classTimeInMinutes = (clase.hour * 60) + clase.minute;
+                const currentTimeInMinutes = (currentHour * 60) + currentMinute;
+                
+                // Diferencia en minutos
+                const difference = classTimeInMinutes - currentTimeInMinutes;
+                
+                // Si faltan exactamente 5 minutos (o un margen de 1 a 5 min) y no se ha notificado
+                if (difference <= 5 && difference > 0 && !notifiedClasses.has(clase.name)) {
+                    triggerNotification(`¡Prepárate! ⏰`, `Tu clase de ${clase.name} empieza en ${difference} minutos.`);
+                    notifiedClasses.add(clase.name); // Registrar que ya se avisó
+                }
+            });
+        }
+
+        function triggerNotification(title, body) {
+            // 1. Notificación Visual In-App (Siempre se muestra)
+            showToast(body, "info");
+
+            // 2. Notificación del Sistema Operativo (Si se dieron permisos)
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title, {
+                    body: body,
+                    icon: "https://cdn-icons-png.flaticon.com/512/3106/3106773.png" // Icono de campana genérico
+                });
+            }
+        }
+
+        // Función para mostrar alertas flotantes agradables a la vista
+        function showToast(message, type = "info") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = "bg-indigo-600";
+            let icon = "fa-info-circle";
+            if (type === "success") { bgClass = "bg-emerald-600"; icon = "fa-check-circle"; }
+            if (type === "warning") { bgClass = "bg-amber-500"; icon = "fa-exclamation-triangle"; }
+
+            toast.className = `${bgClass} text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 transform transition-all duration-300 translate-y-[-20px] opacity-0 pointer-events-auto`;
+            toast.innerHTML = `
+                <i class="fas ${icon} text-lg"></i>
+                <p class="text-sm font-medium leading-tight">${message}</p>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Animación de entrada
+            setTimeout(() => toast.classList.remove('translate-y-[-20px]', 'opacity-0'), 10);
+
+            // Animación de salida y destrucción del elemento después de 5 segundos
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-20px]');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
